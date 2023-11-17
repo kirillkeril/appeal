@@ -6,10 +6,18 @@ services:
     build: back/
     ports:
       - 16001:5000
+    networks:
+      - custom
+
 
   client:
     container_name: client
     build: nuxt/
     ports:
       - 16002:3000
+    networks:
+      - custom
 
+networks:
+  custom:
+    driver: bridge
