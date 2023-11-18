@@ -1,18 +1,18 @@
-import {Prop, SchemaFactory} from "@nestjs/mongoose";
+import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
+import {HydratedDocument} from 'mongoose';
 
+export type AppealDocument = HydratedDocument<Appeal>;
+
+@Schema()
 export class Appeal {
-    @Prop({required: true})
+    @Prop()
     author: string;
-    @Prop({required: true})
+
+    @Prop()
     title: string;
+
     @Prop({required: true})
     body: string;
-
-    constructor(body: string, author?: string, title?: string) {
-        this.author = author ?? "anon";
-        this.title = title ?? "<empty>";
-        this.body = body
-    }
 }
 
 export const AppealSchema = SchemaFactory.createForClass(Appeal);
