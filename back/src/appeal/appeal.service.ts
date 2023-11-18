@@ -11,8 +11,9 @@ export class AppealService {
     }
 
     async create(createAppealDto: CreateAppealDto): Promise<Appeal> {
-        const appeal = await this.appealRepository.create(createAppealDto);
-        return await appeal.save();
+        const appeal = new Appeal(createAppealDto.body, createAppealDto.title, createAppealDto.author);
+        const entity = await this.appealRepository.create(appeal);
+        return await entity.save();
     }
 
     async findAll(): Promise<Appeal[]> {
