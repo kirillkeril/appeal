@@ -1,5 +1,4 @@
-import * as mongoose from "mongoose";
-import {Prop} from "@nestjs/mongoose";
+import {Prop, SchemaFactory} from "@nestjs/mongoose";
 
 export class Appeal {
     @Prop({required: true})
@@ -16,4 +15,4 @@ export class Appeal {
     }
 }
 
-export const AppealSchema = new mongoose.Schema(Appeal);
+export const AppealSchema = SchemaFactory.createForClass(Appeal);
