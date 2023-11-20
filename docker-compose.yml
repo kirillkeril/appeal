@@ -3,7 +3,7 @@ services:
     container_name: db
     image: "mongo:4"
     ports:
-      - 27017:27017
+      - 16017:27017
     networks:
       - custom
 
@@ -29,6 +29,14 @@ services:
       - custom
     environment:
       API_URL: "http://back:5000"
+
+  ml:
+    container_name: ml
+    build: nuxt/
+    ports:
+      - 16003:8000
+    networks:
+      - custom
 
 networks:
   custom:

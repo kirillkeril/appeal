@@ -6,23 +6,34 @@ interface Appeal {
   body: string
 }
 
+interface RequestState {
+  state: string;
+  error: any;
+  value: any;
+}
+
 const model: Ref<Appeal> = useState("appeal", () => {
   return {
     title: "",
     body: ""
   }
 });
+const state: Ref<RequestState> = useState("request", () => {
+  return {
+    state: "",
+    error: null,
+    value: null,
+  }
+});
 
 const sendAppeal = async () => {
-  console.log(model.value.title, model.value.body)
-  const {data, error, refresh, pending} = await useFetch("appeal", {
-    baseURL: "http://bulbaman.me:16001",
+  const {data, error, pending} = await useFetch("appeal", {
+    baseURL: "http://back:5000",
     method: "POST",
     retry: false,
     body: JSON.stringify(model.value),
     server: false
   });
-  console.log(data.value, error.value, pending.value);
 }
 </script>
 
@@ -42,6 +53,11 @@ const sendAppeal = async () => {
       </UForm>
     </UContainer>
   </ClientOnly>
+  <Teleport to="body">
+    <UAlert title="Ошибка">
+      <p>Произошла ошибка при отправке запроса: {{}}</p>
+    </UAlert>
+  </Teleport>
 </template>
 
 <style scoped>
