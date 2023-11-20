@@ -1,18 +1,21 @@
-import {Injectable, NotFoundException, NotImplementedException} from '@nestjs/common';
+import {Injectable, NotFoundException} from '@nestjs/common';
 import {CreateAppealDto} from './dto/create-appeal.dto';
 import {UpdateAppealDto} from './dto/update-appeal.dto';
 import {Appeal} from "./entities/appeal.entity";
 import {Model} from "mongoose";
 import {InjectModel} from "@nestjs/mongoose";
+import {HttpService} from "@nestjs/axios";
+import {firstValueFrom} from "rxjs";
 
 @Injectable()
 export class AppealService {
-    constructor(@InjectModel(Appeal.name) private appealRepository: Model<Appeal>) {
+    constructor(@InjectModel(Appeal.name) private appealRepository: Model<Appeal>, private readonly httpService: HttpService) {
     }
 
     async create(createAppealDto: CreateAppealDto): Promise<Appeal> {
         const entity = await this.appealRepository.create({...createAppealDto});
         await entity.save();
+        await this.handle(entity.id);
         return entity;
     }
 
@@ -38,8 +41,13 @@ export class AppealService {
     }
 
     async handle(id: string) {
-        // TODO Сделать обработку через ML модель
-        throw new NotImplementedException();
+        const appeal = await this.appealRepository.findById(id);
+        if (!appeal) throw new NotFoundException();
+        const {data} = await firstValueFrom(this.httpService.post("http://ml", {
+            "body": appeal.body,
+            "author": appeal.author
+        }));
+        console.log(data);
     }
 
     async remove(id: string) {
