@@ -28,7 +28,7 @@ const state: Ref<RequestState> = useState("request", () => {
 
 const sendAppeal = async () => {
   const {data, error, pending} = await useFetch("appeal", {
-    baseURL: "http://back:5000",
+    baseURL: "http://bulbaman.me:16001",
     method: "POST",
     retry: false,
     body: JSON.stringify(model.value),
