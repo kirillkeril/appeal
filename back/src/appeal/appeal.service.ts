@@ -43,7 +43,7 @@ export class AppealService {
     async handle(id: string) {
         const appeal = await this.appealRepository.findById(id);
         if (!appeal) throw new NotFoundException();
-        const {data} = await firstValueFrom(this.httpService.post("http://ml", {
+        const {data} = await firstValueFrom(this.httpService.post("http://ml:8000", {
             "body": appeal.body,
             "author": appeal.author
         }));
