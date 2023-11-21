@@ -19,7 +19,6 @@ def creating_model(data):
     # Label encoding
     encoder = LabelEncoder()
     encoder.fit(data['class'])
-    data['class'] = encoder.transform(data['class'])
 
     # Tokenization
     tokenizer = Tokenizer(num_words=5) # Consider reducing the vocabulary size
@@ -27,7 +26,7 @@ def creating_model(data):
     sequences = tokenizer.texts_to_sequences(data['text'])
 
     # Padding
-    padded_sequences = pad_sequences(sequences, padding='post')
+    padded_sequences = pad_sequences(sequences, padding='post', maxlen=5)
 
     # Split the data into training and testing sets
     x_train, x_test, y_train, y_test = train_test_split(padded_sequences, data['class'], test_size=0.2, random_state=42)
@@ -52,13 +51,14 @@ def train_model(model, x_train, x_test, y_train, y_test):
     return model
 
 def save_model(model):
-    pass
+    model.save('my_model.h5')
 
 def run(rawdata):
     data = data_loader(rawdata)
-    model=train_model(creating_model(data))
+    model, x_train, x_test, y_train, y_test = creating_model(data)
+    model = train_model(model, x_train, x_test, y_train, y_test)
     save_model(model)
 
 if __name__ == '__main__':
-    run('text_series_full.csv')
+    run('text_series_full1.csv')
 
