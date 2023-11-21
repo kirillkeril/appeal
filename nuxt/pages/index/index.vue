@@ -2,6 +2,7 @@
 import type {Ref} from "vue";
 
 interface Appeal {
+  author: strings,
   title: string
   body: string
 }
@@ -14,6 +15,7 @@ interface RequestState {
 
 const model: Ref<Appeal> = useState("appeal", () => {
   return {
+    author: "",
     title: "",
     body: ""
   }
