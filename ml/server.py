@@ -1,10 +1,12 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import NER
+from Classification2 import load_model
+
 
 class RequestHandler(BaseHTTPRequestHandler):
 
-    async def do_POST(self):
+    def do_POST(self):
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length)
         data = json.loads(post_data)
@@ -12,12 +14,15 @@ class RequestHandler(BaseHTTPRequestHandler):
         # Save the dictionary as a JSON file to prepare them for further dump into MongoDB
         with open('data.json', 'w', encoding='UTF-8') as f:
             json.dump(data, f)
+        #print(load_model('my_model.h5', 'my_model_weights.h5', data['body']))
 
-        print(await NER.nerTask(data['body']))
+        print(NER.nerTask(data['body']))
 
         self.send_response(200)
         self.end_headers()
-        self.wfile.write(json.dumps({"message": f"Ваш {data['author']} отозвался о нашем продукте: {data['body']}"}).encode('utf-8'))
+        self.wfile.write(json.dumps({"message": f"Ваш {data['author']} отозвался о нашем продукте: {data['body']} \n"
+                                                f"Сервер видит вашу сущность : f{NER.nerTask(data['body'])}"}).encode('utf-8'))
+
 
 def run(server_class=HTTPServer, handler_class=RequestHandler):
     server_address = ('', 8000)
