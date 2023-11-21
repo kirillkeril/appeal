@@ -33,6 +33,8 @@ services:
     build: ml/
     ports:
       - 16003:8000
+    environment:
+      - CUDA_VISIBLE_DEVICES=-1
     networks:
       - custom
 
