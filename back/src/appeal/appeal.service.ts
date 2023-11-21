@@ -45,9 +45,11 @@ export class AppealService {
         if (!appeal) throw new NotFoundException();
         const {data} = await firstValueFrom(this.httpService.post("http://ml:8000", {
             "body": appeal.body,
-            "author": appeal.author
+            "author": appeal.author,
         }));
-        console.log(data);
+        appeal.tags = data.tags ?? [];
+        appeal.title = data.title ?? "";
+        await appeal.save();
     }
 
     async remove(id: string) {

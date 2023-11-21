@@ -4,7 +4,7 @@ import NER
 
 class RequestHandler(BaseHTTPRequestHandler):
 
-    def do_POST(self):
+    async def do_POST(self):
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length)
         data = json.loads(post_data)
@@ -13,7 +13,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         with open('data.json', 'w', encoding='UTF-8') as f:
             json.dump(data, f)
 
-        print(NER.nerTask(data['body']))
+        print(await NER.nerTask(data['body']))
 
         self.send_response(200)
         self.end_headers()

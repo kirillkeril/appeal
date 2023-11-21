@@ -13,6 +13,9 @@ export class Appeal {
 
     @Prop({required: true})
     body: string;
+
+    @Prop({required: false})
+    tags: [string];
 }
 
 export const AppealSchema = SchemaFactory.createForClass(Appeal);
