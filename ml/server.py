@@ -20,8 +20,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 
         self.send_response(200)
         self.end_headers()
-        self.wfile.write(json.dumps({"message": f"Ваш {data['author']} отозвался о нашем продукте: {data['body']} \n"
-                                                f"Сервер видит вашу сущность : f{NER.nerTask(data['body'])}"}).encode('utf-8'))
+        self.wfile.write(json.dumps(f"{NER.nerTask(data['body'])}").encode('utf-8'))
 
 
 def run(server_class=HTTPServer, handler_class=RequestHandler):
