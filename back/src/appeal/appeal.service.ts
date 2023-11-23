@@ -15,8 +15,8 @@ export class AppealService {
     async create(createAppealDto: CreateAppealDto): Promise<Appeal> {
         const entity = await this.appealRepository.create({...createAppealDto});
         await entity.save();
-        await this.handle(entity.id);
-        return entity;
+        const result = await this.handle(entity.id);
+        return result;
     }
 
     async findAll(): Promise<Appeal[]> {
@@ -47,6 +47,7 @@ export class AppealService {
             "body": appeal.body,
         }));
         await appeal.save();
+        return data;
     }
 
     async remove(id: string) {
