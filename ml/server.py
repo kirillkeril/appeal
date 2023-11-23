@@ -19,6 +19,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         print(NER.nerTask(data['body']))
 
         self.send_response(200)
+        self.headers = {"content_type": "application/json"}
         self.end_headers()
         self.wfile.write(json.dumps(f"{NER.nerTask(data['body'])}").encode('utf-8'))
 
