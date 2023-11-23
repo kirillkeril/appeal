@@ -45,10 +45,7 @@ export class AppealService {
         if (!appeal) throw new NotFoundException();
         const {data} = await firstValueFrom(this.httpService.post("http://ml:8000", {
             "body": appeal.body,
-            "author": appeal.author,
         }));
-        appeal.tags = data.tags ?? [];
-        appeal.title = data.title ?? "";
         await appeal.save();
     }
 
